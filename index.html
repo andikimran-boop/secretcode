@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Dad & Kid Secret Decoder</title>
+<style>
+:root{
+  --bg1:#7c3cff;
+  --bg2:#00c2ff;
+  --bg3:#ffcb3d;
+  --card:#ffffff;
+  --ink:#24163a;
+  --muted:#5d4c78;
+  --pink:#ff4fa3;
+  --purple:#7c3cff;
+  --blue:#00a7ff;
+  --green:#23c483;
+  --yellow:#ffd34d;
+  --line:#eadfff;
+  --input:#fff8ff;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:"Trebuchet MS","Comic Sans MS","Arial Rounded MT Bold",system-ui,sans-serif;
+  background:
+    radial-gradient(circle at 10% 8%, rgba(255,255,255,.75) 0 7%, transparent 8%),
+    radial-gradient(circle at 92% 15%, rgba(255,255,255,.45) 0 5%, transparent 6%),
+    linear-gradient(135deg,var(--bg1),var(--bg2) 58%,var(--bg3));
+  color:var(--ink);
+  padding:18px;
+  min-height:100vh;
+}
+.wrap{max-width:780px;margin:0 auto}
+h1{
+  font-size:32px;
+  line-height:1.05;
+  margin:12px 0 8px;
+  letter-spacing:.3px;
+  color:#fff;
+  text-shadow:0 4px 0 rgba(36,22,58,.28);
+}
+.sub{
+  color:#fff;
+  margin:0 0 18px;
+  font-size:16px;
+  font-weight:800;
+  text-shadow:0 2px 10px rgba(36,22,58,.3);
+}
+.card{
+  background:rgba(255,255,255,.94);
+  border:4px solid rgba(255,255,255,.75);
+  border-radius:28px;
+  padding:17px;
+  margin:15px 0;
+  box-shadow:0 12px 0 rgba(36,22,58,.16),0 18px 34px rgba(36,22,58,.22);
+  position:relative;
+  overflow:hidden;
+}
+.card:before{
+  content:"";
+  position:absolute;
+  right:-28px;top:-28px;
+  width:92px;height:92px;
+  background:radial-gradient(circle,var(--yellow) 0 35%,transparent 36%);
+  opacity:.45;
+}
+label{
+  display:block;
+  font-weight:1000;
+  margin:0 0 9px;
+  font-size:17px;
+  color:var(--purple);
+}
+textarea{
+  width:100%;
+  min-height:125px;
+  border:3px solid #dfcfff;
+  border-radius:22px;
+  padding:15px;
+  background:var(--input);
+  color:var(--ink);
+  font-size:19px;
+  line-height:1.45;
+  resize:vertical;
+  outline:none;
+  box-shadow:inset 0 4px 0 rgba(124,60,255,.08);
+}
+textarea:focus{border-color:var(--pink);box-shadow:0 0 0 5px rgba(255,79,163,.18),inset 0 4px 0 rgba(124,60,255,.08)}
+button{
+  appearance:none;
+  border:0;
+  border-radius:18px;
+  padding:13px 15px;
+  background:linear-gradient(180deg,#8a7cff,#6d42ff);
+  color:white;
+  font-weight:1000;
+  font-size:16px;
+  margin:10px 7px 0 0;
+  box-shadow:0 5px 0 #4b2db5;
+}
+button:active{transform:translateY(3px);box-shadow:0 2px 0 #4b2db5}
+button.primary{background:linear-gradient(180deg,#ff72bd,#ff3d9d);box-shadow:0 5px 0 #b51e66}
+button.good{background:linear-gradient(180deg,#35dd9a,#16aa6b);box-shadow:0 5px 0 #08784b}
+.output{
+  white-space:pre-wrap;
+  word-break:break-word;
+  min-height:95px;
+  border:3px dashed #ff9bd0;
+  border-radius:22px;
+  padding:15px;
+  background:linear-gradient(135deg,#fff8ff,#f2fbff);
+  font-size:28px;
+  line-height:1.55;
+  box-shadow:inset 0 4px 0 rgba(255,79,163,.08);
+}
+.small{font-size:14px;color:var(--muted);line-height:1.45;font-weight:700}.grid{display:grid;grid-template-columns:1fr;gap:12px}.legend{font-size:16px;line-height:1.9;background:#fff8ff;border:3px solid #dfcfff;border-radius:22px;padding:14px;font-weight:900}.pill{display:inline-block;border:2px solid #dfcfff;border-radius:999px;padding:6px 10px;margin:4px;background:#fff;box-shadow:0 3px 0 rgba(124,60,255,.16);font-weight:1000}.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#24163a;color:white;padding:12px 16px;border-radius:999px;font-weight:1000;display:none;box-shadow:0 8px 20px rgba(0,0,0,.3)}
+@media(min-width:720px){.grid{grid-template-columns:1fr 1fr}textarea{min-height:150px}h1{font-size:42px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>🕵️‍♂️ Secret Spy Messenger</h1>
+<p class="sub">Make secret emoji messages. Decode them like a spy. ✨</p>
+
+<div class="card">
+<label for="plain">💬 Normal Message</label>
+<textarea id="plain" placeholder="Example: HELLO DAD 2026"></textarea>
+<button class="primary" id="encodeBtn">Make Secret Code</button>
+<button id="clearBtn">Clear</button>
+</div>
+
+<div class="card">
+<label>🔐 Secret Code</label>
+<div id="secretOut" class="output"></div>
+<button class="good" id="copySecret">Copy Secret Code</button>
+<button id="shareSecret">Share WhatsApp</button>
+</div>
+
+<div class="card">
+<label for="secretIn">🧩 Paste Secret Code to Decode</label>
+<textarea id="secretIn" placeholder="Paste emoji code here"></textarea>
+<button class="primary" id="decodeBtn">Decode</button>
+</div>
+
+<div class="card">
+<label>🎉 Decoded Message</label>
+<div id="decodedOut" class="output"></div>
+<button class="good" id="copyDecoded">Copy Decoded Message</button>
+</div>
+
+<div class="card grid">
+<div>
+<label>🌈 Letter Groups</label>
+<div class="legend">
+❤️☝️ A ❤️✌️ B ❤️🤟 C ❤️🖖 D ❤️✋ E<br>
+💛☝️ F 💛✌️ G 💛🤟 H 💛🖖 I 💛✋ J<br>
+💚☝️ K 💚✌️ L 💚🤟 M 💚🖖 N 💚✋ O<br>
+💙☝️ P 💙✌️ Q 💙🤟 R 💙🖖 S 💙✋ T<br>
+💜☝️ U 💜✌️ V 💜🤟 W 💜🖖 X 💜✋ Y<br>
+😴☝️ Z
+</div>
+</div>
+<div>
+<label>🔢 Number Code</label>
+<div class="legend">
+<span class="pill">☝️ = 1</span><span class="pill">✌️ = 2</span><span class="pill">🤟 = 3</span><span class="pill">🖖 = 4</span><span class="pill">✋ = 5</span><br>
+<span class="pill">🖐️☝️ = 6</span><span class="pill">🖐️✌️ = 7</span><span class="pill">🖐️🤟 = 8</span><span class="pill">🖐️🖖 = 9</span><span class="pill">🖐️🖐️ = 0</span>
+<p class="small">Numbers are wrapped with 🔢 so decoding is reliable. Example: 2026 becomes 🔢✌️🖐️🖐️✌️🖐️☝️🔢</p>
+</div>
+</div>
+</div>
+<p class="small">Tip: save this page to your phone home screen so it works like a tiny app.</p>
+</div>
+<div id="toast" class="toast">Copied</div>
+<script>
+const hands=['☝️','✌️','🤟','🖖','✋'];
+const groups=[['❤️','ABCDE'],['💛','FGHIJ'],['💚','KLMNO'],['💙','PQRST'],['💜','UVWXY'],['😴','Z']];
+const numMap={'1':'☝️','2':'✌️','3':'🤟','4':'🖖','5':'✋','6':'🖐️☝️','7':'🖐️✌️','8':'🖐️🤟','9':'🖐️🖖','0':'🖐️🖐️'};
+const revNum={}; Object.keys(numMap).forEach(k=>revNum[numMap[k]]=k);
+const letterMap={}, revLetter={};
+groups.forEach(([heart,letters])=>{[...letters].forEach((ch,i)=>{letterMap[ch]=heart+hands[i]; revLetter[heart+hands[i]]=ch;});});
+function encode(text){let out=[]; for(const raw of text.toUpperCase()){ if(letterMap[raw]) out.push(letterMap[raw]); else if(/[0-9]/.test(raw)) out.push('🔢'+numMap[raw]+'🔢'); else if(raw===' ') out.push(' / '); else out.push(raw);} return out.join(' ');}
+function decode(code){let s=code.replaceAll('\uFE0F','️').trim(); let out=''; let i=0; const hearts=['❤️','💛','💚','💙','💜','😴']; while(i<s.length){ if(/\s/.test(s[i])){i++;continue} if(s[i]==='/'){out+=' ';i++;continue} if(s.startsWith('🔢',i)){let end=s.indexOf('🔢',i+2); if(end>-1){let token=s.slice(i+2,end); out+=revNum[token]||'?'; i=end+2; continue}} let matched=false; for(const h of hearts){ if(s.startsWith(h,i)){ for(const hand of hands){let tok=h+hand; if(s.startsWith(tok,i)){out+=revLetter[tok]||'?'; i+=tok.length; matched=true; break}} if(matched)break; }} if(matched)continue; let numMatched=false; const numTokens=Object.keys(revNum).sort((a,b)=>b.length-a.length); for(const tok of numTokens){ if(s.startsWith(tok,i)){out+=revNum[tok]; i+=tok.length; numMatched=true; break}} if(numMatched)continue; out+=s[i]; i++; } return out;}
+const $=id=>document.getElementById(id); function refresh(){ $('secretOut').textContent=encode($('plain').value); $('decodedOut').textContent=decode($('secretIn').value); }
+$('plain').addEventListener('input',refresh); $('secretIn').addEventListener('input',refresh); $('encodeBtn').onclick=refresh; $('decodeBtn').onclick=refresh; $('clearBtn').onclick=()=>{$('plain').value='';$('secretIn').value='';refresh();};
+async function copyText(t){try{await navigator.clipboard.writeText(t); showToast('Copied');}catch(e){showToast('Copy not supported');}}
+function showToast(t){$('toast').textContent=t;$('toast').style.display='block';setTimeout(()=>$('toast').style.display='none',1400)}
+$('copySecret').onclick=()=>copyText($('secretOut').textContent); $('copyDecoded').onclick=()=>copyText($('decodedOut').textContent);
+$('shareSecret').onclick=()=>{const txt=encode($('plain').value); if(navigator.share){navigator.share({text:txt}).catch(()=>{});}else{location.href='https://wa.me/?text='+encodeURIComponent(txt)}};
+refresh();
+</script>
+</body>
+</html>
